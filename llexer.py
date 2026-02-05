@@ -19,19 +19,6 @@ class LLexer:
         "end": 10,
     }
 
-    ID = 0
-    ASSIGN = 1
-    SEMICOL = 2
-    INT = 3
-    PLUS = 4
-    MINUS = 5
-    MULT = 6
-    LPAREN = 7
-    RPAREN = 8
-    PRINT = 9
-    END = 10
-    ERROR = 11
-
     def __init__(self):
         self.lexer = ""
         self.next_char = ""
@@ -41,7 +28,7 @@ class LLexer:
         self.key_chars.append("\n")
 
     def get_next_token(self) -> LToken:
-        """?"""
+        """Return a new Token from std in"""
         self.lexer = ""
         while self.check_space():
             self.get_char()
@@ -54,7 +41,8 @@ class LLexer:
 
         return self.is_var_token()
 
-    def is_key_token(self):
+    def is_key_token(self) -> LToken:
+        """if next_char is a key value make a new token"""
         self.lexer += self.next_char
         if self.next_char in self.key_chars:
             self.get_char()
@@ -62,9 +50,12 @@ class LLexer:
 
         if self.next_char == "\n":
             self.get_char()
-            return LToken(self.lexer, self.ID)
+            return LToken(self.lexer, LToken.ID)
 
-    def is_var_token(self):
+        return None
+
+    def is_var_token(self) -> LToken:
+        """Find all char to make a int or string value"""
         while True:
             if self.next_char.isalpha() or self.next_char.isdigit():
                 self.lexer += self.next_char
@@ -74,17 +65,18 @@ class LLexer:
                 return token
             self.get_char()
 
-    def make_token(self):
+    def make_token(self) -> LToken:
+        """Make a token for a long strign and check if value is end og print"""
         if self.lexer == "end":
-            return LToken(self.lexer.strip(), self.END)
+            return LToken(self.lexer.strip(), LToken.END)
 
         if self.lexer == "print":
-            return LToken(self.lexer.strip(), self.PRINT)
+            return LToken(self.lexer.strip(), LToken.PRINT)
 
         if self.lexer.isdigit():
-            return LToken(self.lexer.strip(), self.INT)
+            return LToken(self.lexer.strip(), LToken.INT)
 
-        return LToken(self.lexer.strip(), self.ID)
+        return LToken(self.lexer.strip(), LToken.ID)
 
     def get_char(self) -> None:
         """
@@ -95,20 +87,6 @@ class LLexer:
         """
         self.next_char = sys.stdin.read(1)
 
-    def check_space(self):
+    def check_space(self) -> bool:
         """check if next char has space"""
         return self.next_char.isspace()
-
-
-if __name__ == "__main__":
-    lexer: LLexer = LLexer()
-    curr_token: LToken = LToken("", LToken.ERROR)
-    new_line = []
-
-    while curr_token.token_code != LToken.END:
-        curr_token = lexer.get_next_token()
-        print(curr_token)
-        new_line.append(curr_token)
-
-    for x in new_line:
-        print(x)
