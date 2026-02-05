@@ -7,20 +7,17 @@ from ltoken import LToken
 class LLexer:
     """Lexer class"""
 
-    KEY_TOKENS = [
-        "if",
-        "print",
-        ";",
-        "end",
-        "id",
-        "=",
-        "+",
-        "-",
-        "*",
-        "int",
-        "(",
-        ")",
-    ]
+    KEY_TOKENS = {
+        "=": 1,
+        ";": 2,
+        "+": 4,
+        "-": 5,
+        "*": 6,
+        "(": 7,
+        ")": 8,
+        "print": 9,
+        "end": 10,
+    }
 
     ID = 0
     ASSIGN = 1
@@ -38,24 +35,48 @@ class LLexer:
     def __init__(self):
         self.lexer = ""
         self.next_char = ""
+        self.key_chars: list = []
+        for key in self.KEY_TOKENS.keys():
+            self.key_chars.append(key)
+        self.key_chars.append("\n")
 
-    def get_next_token(self) -> str:
+    def get_next_token(self) -> LToken:
         """?"""
-        while self.next_char != ";":
+        self.lexer = ""
+
+        if self.next_char in self.key_chars:
+            token: LToken = self.make_key_token()
+            self.next_char = ""
+            return token
+
+        if self.next_char == "\n":
+            return LToken(self.next_char, self.ID)
+
+        while True:
             self.get_char()
             if self.next_char == " ":
-                self.lookup()
-            self.lexer += self.next_char
+                self.get_char()
 
-        print(self.lexer)
+            if self.next_char.isalpha() or self.next_char.isdigit():
+                self.lexer += self.next_char
 
-    def lookup(self):
-        """Returns 0 if the lexeme is not a reserved word but token
-        code for any reserved word"""
-        if self.lexer not in self.KEY_TOKENS:
-            return 0
-        else:
-            pass
+            if not self.next_char.isalpha() or self.next_char.isdigit():
+                token: LToken = self.make_token()
+                return token
+
+    def make_token(self):
+        if self.lexer == "end":
+            return LToken(self.lexer.strip(), self.END)
+
+        if self.lexer.isdigit():
+            return LToken(self.lexer.strip(), self.INT)
+
+        if self.lexer.isalpha():
+            return LToken(self.lexer.strip(), self.ID)
+
+    def make_key_token(self):
+        if self.next_char in self.key_chars:
+            return LToken(self.next_char.strip(), self.KEY_TOKENS[self.next_char])
 
     def get_char(self) -> None:
         """
@@ -66,11 +87,8 @@ class LLexer:
         """
         self.next_char = sys.stdin.read(1)
 
-    def add_char(self):
-        """puts the character in nextChar into lexeme"""
-        pass
-
 
 if __name__ == "__main__":
     t = LLexer()
-    t.get_next_token()
+    k = t.get_next_token()
+    print(k)

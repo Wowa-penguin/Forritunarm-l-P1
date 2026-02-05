@@ -46,43 +46,6 @@ class LToken:
     def __init__(self, token_input, token=-1):
         self.token_input = token_input
         self.token_code = token
-        # if token == -1:
-        #     self.set_token_code()
-
-    def set_token_code(self) -> None:
-        """set the token code from the input"""
-        if self.token_input not in self.KEY_TOKENS:
-            self.token_code = self.ASSIGN
-            return
-
-        match self.token_input:
-            case "int":
-                self.token_code = self.INT
-            case "print":
-                self.token_code = self.PRINT
-            case "=":
-                self.token_code = self.ASSIGN
-            case "+":
-                self.token_code = self.PLUS
-            case "-":
-                self.token_code = self.MINUS
-            case "*":
-                self.token_code = self.MULT
-            case ";":
-                self.token_code = self.SEMICOL
-            case "\n":
-                self.token_code = self.END
-            case "(":
-                self.token_code = self.LPAREN
-            case ")":
-                self.token_code = self.RPAREN
-            case "id":
-                self.token_code = self.ID
-            case "END":
-                self.token_code = self.END
-
-    def add(self):
-        pass
 
     def __str__(self) -> str:
-        return self.token_input
+        return f"{self.token_input} {self.token_code}"
