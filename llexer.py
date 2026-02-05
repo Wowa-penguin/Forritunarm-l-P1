@@ -43,40 +43,49 @@ class LLexer:
     def get_next_token(self) -> LToken:
         """?"""
         self.lexer = ""
+        while self.check_space():
+            self.get_char()
 
+        if self.next_char in self.key_chars or self.next_char == "\n":
+            return self.is_key_token()
+
+        if not self.next_char.isdigit() and not self.next_char.isalpha():
+            self.get_char()
+
+        return self.is_var_token()
+
+    def is_key_token(self):
+        self.lexer += self.next_char
         if self.next_char in self.key_chars:
-            token: LToken = self.make_key_token()
-            self.next_char = ""
-            return token
+            self.get_char()
+            return LToken(self.lexer.strip(), self.KEY_TOKENS[self.lexer])
 
         if self.next_char == "\n":
-            return LToken(self.next_char, self.ID)
-
-        while True:
             self.get_char()
-            if self.next_char == " ":
-                self.get_char()
+            return LToken(self.lexer, self.ID)
 
+    def is_var_token(self):
+        while True:
             if self.next_char.isalpha() or self.next_char.isdigit():
                 self.lexer += self.next_char
 
-            if not self.next_char.isalpha() or self.next_char.isdigit():
+            if not self.next_char.isalpha() and not self.next_char.isdigit():
                 token: LToken = self.make_token()
                 return token
+            self.get_char()
 
     def make_token(self):
         if self.lexer == "end":
             return LToken(self.lexer.strip(), self.END)
+
+        if self.lexer == "print":
+            return LToken(self.lexer.strip(), self.PRINT)
 
         if self.lexer.isdigit():
             return LToken(self.lexer.strip(), self.INT)
 
         if self.lexer.isalpha():
             return LToken(self.lexer.strip(), self.ID)
-
-    def make_key_token(self):
-        if self.next_char in self.key_chars:
-            return LToken(self.next_char.strip(), self.KEY_TOKENS[self.next_char])
 
     def get_char(self) -> None:
         """
@@ -87,8 +96,20 @@ class LLexer:
         """
         self.next_char = sys.stdin.read(1)
 
+    def check_space(self):
+        """check if next char has space"""
+        return self.next_char.isspace()
+
 
 if __name__ == "__main__":
-    t = LLexer()
-    k = t.get_next_token()
-    print(k)
+    lexer: LLexer = LLexer()
+    curr_token: LToken = LToken("", LToken.ERROR)
+    new_line = []
+
+    while curr_token.token_code != LToken.END:
+        curr_token = lexer.get_next_token()
+        print(curr_token)
+        new_line.append(curr_token)
+
+    for x in new_line:
+        print(x)

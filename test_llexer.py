@@ -12,7 +12,6 @@ if __name__ == "__main__":
 
     while curr_token.token_code != LToken.END:
         curr_token = lexer.get_next_token()
-        print(curr_token)
         new_line.append(curr_token)
 
     for x in new_line:
