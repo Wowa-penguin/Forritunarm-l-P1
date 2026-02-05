@@ -10,11 +10,23 @@ class LToken:
     ID = [A-Za-z]+
     END = end
     PRINT = print
+    Tokens/terminals are:
+    ; end id = print + - * int ( )
     """
 
     KEY_TOKENS = [
         "if",
         "print",
+        ";",
+        "end",
+        "id",
+        "=",
+        "+",
+        "-",
+        "*",
+        "int",
+        "(",
+        ")",
     ]
 
     ID = 0
@@ -34,8 +46,8 @@ class LToken:
     def __init__(self, token_input, token=-1):
         self.token_input = token_input
         self.token_code = token
-        if token == -1:
-            self.set_token_code()
+        # if token == -1:
+        #     self.set_token_code()
 
     def set_token_code(self) -> None:
         """set the token code from the input"""
@@ -48,6 +60,8 @@ class LToken:
                 self.token_code = self.INT
             case "print":
                 self.token_code = self.PRINT
+            case "=":
+                self.token_code = self.ASSIGN
             case "+":
                 self.token_code = self.PLUS
             case "-":
@@ -58,6 +72,17 @@ class LToken:
                 self.token_code = self.SEMICOL
             case "\n":
                 self.token_code = self.END
+            case "(":
+                self.token_code = self.LPAREN
+            case ")":
+                self.token_code = self.RPAREN
+            case "id":
+                self.token_code = self.ID
+            case "END":
+                self.token_code = self.END
+
+    def add(self):
+        pass
 
     def __str__(self) -> str:
         return self.token_input

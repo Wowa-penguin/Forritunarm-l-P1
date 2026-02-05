@@ -10,6 +10,7 @@ class LParser:
     def __init__(self, lexer: LLexer):
         self.lexer = lexer
         self.curr_token: LToken = LToken("", LToken.ERROR)
+        self.stack = []  # ? Last-In, First-Out
 
     def parse(self):
         self.next_token()
