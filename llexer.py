@@ -84,8 +84,7 @@ class LLexer:
         if self.lexer.isdigit():
             return LToken(self.lexer.strip(), self.INT)
 
-        if self.lexer.isalpha():
-            return LToken(self.lexer.strip(), self.ID)
+        return LToken(self.lexer.strip(), self.ID)
 
     def get_char(self) -> None:
         """
