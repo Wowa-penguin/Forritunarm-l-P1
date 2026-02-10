@@ -8,26 +8,9 @@ class LToken:
     { ID, ASSIGN, SEMICOL, INT, PLUS, MINUS, MULT, LPAREN, RPAREN, PRINT, END, ERROR}
     INT = [0-9]+
     ID = [A-Za-z]+
-    END = end
-    PRINT = print
     Tokens/terminals are:
-    ; end id = print + - * int ( )
+        ; end id = print + - * int ( )
     """
-
-    KEY_TOKENS = [
-        "if",
-        "print",
-        ";",
-        "end",
-        "id",
-        "=",
-        "+",
-        "-",
-        "*",
-        "int",
-        "(",
-        ")",
-    ]
 
     ID = 0
     ASSIGN = 1
@@ -42,10 +25,9 @@ class LToken:
     END = 10
     ERROR = 11
 
-    # * reserved words
     def __init__(self, token_input, token=-1):
         self.token_input = token_input
         self.token_code = token
 
     def __str__(self) -> str:
-        return f"{self.token_input} {self.token_code}"
+        return f"{self.token_input} - {self.token_code}"
