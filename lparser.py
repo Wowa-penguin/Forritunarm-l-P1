@@ -7,31 +7,22 @@ from ltoken import LToken
 
 class LParser:
     """L Parser class
-    PUSH op ADD SUB MULT ASSIGN PRINT pushes the operand op onto the stack
-    ADD     - pops the two top elements from the stack, adds their values
-            - and pushes the result back onto the stack
-    SUB     - pops the two top elements from the stack, subtracts the first
-            - value retrieved from the second value,
-            - and pushes the result back onto the stack
-    MULT    - pops the two top elements from the stack, multiplies their
-            - values and pushes the result back onto the stack
-    ASSIGN  - pops the two top elements from the stack, assigns the first
-            - element (a value) to the second element (a variable)
-    PRINT   - prints the value currently on top of the stack
+    Statements -> Statement ; Statements | end
+    Statement -> id = Expr | print id
+    Expr- > Term | Term + Expr | Term - Expr
+    Term -> Factor | Factor * Term
+    Factor -> int | id | ( Expr )
     """
 
     def __init__(self, lexer: LLexer):
         self.lexer = lexer
         self.curr_token: LToken = LToken("", LToken.ERROR)
         self.stack: list[LToken] = []  # ? Last-In, First-Out -> append, pop
-        self.var_list: list[LToken] = []
-        self.ops_list: list[LToken] = []
 
     def parse(self):
         """?"""
-        while self.curr_token.token_code != LToken.END:
-            self.next_token()
-            self.statements()
+        self.next_token()
+        self.statements()
 
     def next_token(self):
         """get the next token from the lexer"""
@@ -41,58 +32,65 @@ class LParser:
 
     def statements(self):
         """?"""
+        while self.curr_token.token_code != LToken.END:
+            match self.curr_token.token_code:
+                case LToken.ID | LToken.PRINT:
+                    self.statement()
+                case LToken.SEMICOL:
+                    self.next_token()
+
+    def statement(self):
+        match self.curr_token.token_code:
+            case LToken.ID:
+                print(f"PUSH {self.curr_token.token_input}")
+                self.next_token()
+                if self.curr_token.token_code == LToken.ASSIGN:
+                    self.next_token()
+                self.expr()
+                print("ASSIGN")
+            case LToken.PRINT:
+                self.next_token()
+                if self.curr_token.token_code != LToken.ID:
+                    self.error()
+                    return
+                print(f"PUSH {self.curr_token.token_input}")
+                print("PRINT")
+                self.next_token()
+
+    def expr(self):
+        self.term()
+        match self.curr_token.token_code:
+            case LToken.PLUS:
+                self.next_token()
+                self.expr()
+                print("ADD")
+            case LToken.MINUS:
+                self.next_token()
+                self.expr()
+                print("SUB")
+        return
+
+    def term(self):
+        self.factor()
+        self.next_token()
+        match self.curr_token.token_code:
+            case LToken.MULT:
+                self.next_token()
+                self.term()
+                print("MULT")
+        return
+
+    def factor(self):
         match self.curr_token.token_code:
             case LToken.ID | LToken.INT:
-                self.var_list.append(self.curr_token)
-            case (
-                LToken.ASSIGN
-                | LToken.PLUS
-                | LToken.MINUS
-                | LToken.MULT
-                | LToken.PRINT
-                | LToken.LPAREN
-                | LToken.RPAREN
-            ):
-                self.ops_list.append(self.curr_token)
-            case LToken.SEMICOL:
-                self.add_to_stack()
-
-    def add_to_stack(self):
-        """Add tokens to the stack in correct order"""
-
-        for var_token in self.var_list:
-            self.stack.append(var_token)
-        self.var_list = []
-
-        is_paren, left_index, right_index = self.check_for_paren()
-        if is_paren:
-            print(left_index, right_index)
-            print(len(self.ops_list))
-            for x in self.ops_list[left_index + 1 : right_index]:
-                self.stack.append(x)
-
-            self.ops_list.remove(self.ops_list[left_index])
-            self.ops_list.remove(self.ops_list[right_index - 1])
-
-        for op_token in self.ops_list:
-            print(op_token)
-            self.stack.append(op_token)
-
-        self.ops_list = []
-
-    def check_for_paren(self):
-        left_index = 0
-        right_index = 0
-        is_paren = False
-
-        for index, op_token in enumerate(self.ops_list):
-            if LToken.LPAREN == op_token.token_code:
-                is_paren = True
-                left_index = index
-            if LToken.RPAREN == op_token.token_code:
-                right_index = index
-
-        return is_paren, left_index, right_index
+                print(f"PUSH {self.curr_token.token_input}")
+                return
+            case LToken.LPAREN:
+                self.next_token()
+                self.expr()
+                if self.curr_token.token_code == LToken.RPAREN:
+                    return
+        return
 
     def error(self):
         """?"""
