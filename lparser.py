@@ -63,11 +63,22 @@ class LParser:
                 self.next_token()
                 self.expr()
                 print("ADD")
+                return
             case LToken.MINUS:
                 self.next_token()
                 self.expr()
                 print("SUB")
-        return
+                return
+            case (
+                LToken.SEMICOL
+                | LToken.LPAREN
+                | LToken.RPAREN
+                | LToken.ID
+                | LToken.INT
+                | LToken.MULT
+            ):
+                return
+        self.error()
 
     def term(self):
         self.factor()
@@ -93,7 +104,7 @@ class LParser:
 
     def error(self):
         """?"""
-        print("Error")
+        print("Syntax error")
         sys.exit(1)
 
 
