@@ -17,7 +17,6 @@ class LParser:
     def __init__(self, lexer: LLexer):
         self.lexer = lexer
         self.curr_token: LToken = LToken("", LToken.ERROR)
-        self.stack: list[LToken] = []  # ? Last-In, First-Out -> append, pop
 
     def parse(self):
         """?"""
@@ -96,11 +95,6 @@ class LParser:
         """?"""
         print("Error")
         sys.exit(1)
-
-    def __str__(self):
-        for x in self.stack:
-            print(x)
-        return ""
 
 
 if __name__ == "__main__":
