@@ -19,7 +19,11 @@ class SInterpreter:
             value_1 = self.var[value_1]
         if value_2 in self.var.keys():
             value_2 = self.var[value_2]
-        self.stack.append(int(value_1) + int(value_2))
+        try:
+            self.stack.append(int(value_1) + int(value_2))
+        except TypeError:
+            print("Error")
+            sys.exit(1)
 
     def sub(self):
         """SUB
