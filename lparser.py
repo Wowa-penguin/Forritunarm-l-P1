@@ -57,7 +57,7 @@ class LParser:
             if self.curr_token.token_code != LToken.ID:
                 error_msg = [
                     key
-                    for key, value in self.lexer.KEY_TOKENS.items()
+                    for key, value in self.lexer.KEY_TOKENS
                     if value == self.curr_token.token_code
                 ]
                 self.error(f"Syntax error print a variable not {error_msg[0]}")
@@ -83,7 +83,7 @@ class LParser:
             self.expr()
             print("SUB")
             return
-        if tc not in self.lexer.KEY_TOKENS.values():
+        if tc not in self.lexer.KEY_TOKENS:
             self.error("Syntax error")
         return
 
