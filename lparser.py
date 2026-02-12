@@ -35,22 +35,24 @@ class LParser:
             tc = self.curr_token.token_code
             if tc in (LToken.ID, LToken.PRINT):
                 self.statement()
-            elif tc == LToken.SEMICOL:
+            if tc == LToken.SEMICOL:
                 self.next_token()
-            elif tc == LToken.ERROR:
+            if tc == LToken.ERROR:
                 self.error("Syntax error")
 
     def statement(self):
         """Statement -> id = Expr | print id"""
         tc = self.curr_token.token_code
         if tc == LToken.ID:
-            print(f"PUSH {self.curr_token.token_input}")
+            variable = self.curr_token.token_input
             self.next_token()
             if self.curr_token.token_code == LToken.ASSIGN:
+                print(f"PUSH {variable}")
                 self.next_token()
-            self.expr()
-            print("ASSIGN")
-        elif tc == LToken.PRINT:
+                self.expr()
+                print("ASSIGN")
+                return
+        if tc == LToken.PRINT:
             self.next_token()
             if self.curr_token.token_code != LToken.ID:
                 error_msg = [
@@ -64,6 +66,8 @@ class LParser:
             print("PRINT")
             self.next_token()
 
+        self.error("Syntax error")
+
     def expr(self):
         """Expr -> Term | Term + Expr | Term - Expr"""
         self.term()
@@ -73,12 +77,12 @@ class LParser:
             self.expr()
             print("ADD")
             return
-        elif tc == LToken.MINUS:
+        if tc == LToken.MINUS:
             self.next_token()
             self.expr()
             print("SUB")
             return
-        elif tc not in self.lexer.KEY_TOKENS.values():
+        if tc not in self.lexer.KEY_TOKENS.values():
             self.error("Syntax error")
         return
 
@@ -99,12 +103,13 @@ class LParser:
         if tc in (LToken.ID, LToken.INT):
             print(f"PUSH {self.curr_token.token_input}")
             return
-        elif tc == LToken.LPAREN:
+        if tc == LToken.LPAREN:
             self.next_token()
             self.expr()
             if self.curr_token.token_code == LToken.RPAREN:
                 return
-        return
+        else:
+            self.error("Syntax error")
 
     def error(self, msg: str):
         """Print error msg and exit program"""

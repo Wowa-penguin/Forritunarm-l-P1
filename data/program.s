@@ -1,12 +1,3 @@
 PUSH var
 PUSH 3
-ASSIGN
-PUSH b
-PUSH 4
-PUSH 7
-PUSH var
-SUB
-MULT
-ASSIGN
-PUSH b
-PRINT
+Syntax error
