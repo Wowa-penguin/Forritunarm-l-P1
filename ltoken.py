@@ -12,21 +12,6 @@ class LToken:
         ; end id = print + - * int ( )
     """
 
-    TOKENS = {
-        0: "ID",
-        1: "ASSIGN",
-        2: "SEMICOL",
-        3: "INT",
-        4: "PLUS",
-        5: "MINUS",
-        6: "MULT",
-        7: "LPAREN",
-        8: "RPAREN",
-        9: "PRINT",
-        10: "END",
-        11: "ERROR",
-    }
-
     ID = 0
     ASSIGN = 1
     SEMICOL = 2
@@ -44,5 +29,8 @@ class LToken:
         self.lexeme = lexeme
         self.token_code = token
 
-    def __str__(self) -> str:
-        return f"{self.TOKENS[self.token_code]} {self.lexeme} "
+    def __str__(self):
+        return f"LToken({self.token_code}, '{self.lexeme}')"
+
+    def __repr__(self):
+        return self.__str__()
