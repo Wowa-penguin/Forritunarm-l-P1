@@ -109,6 +109,8 @@ class SInterpreter:
             elif op == "UMINUS":
                 print("Error for operator: UMINUS")
                 break
+            else:
+                print(f"Error for operator: {op}")
 
 
 if __name__ == "__main__":
