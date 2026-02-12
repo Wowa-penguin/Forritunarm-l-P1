@@ -1,3 +1,5 @@
+"""Imports"""
+
 import sys
 
 
@@ -8,6 +10,12 @@ class SInterpreter:
         self.stack = []  # ? Last-In, First-Out -> append, pop
         self.var = {}
 
+    def in_var(self, value):
+        """Check if a instans of a var is in dict of var"""
+        if value in self.var:
+            return self.var[value]
+        return value
+
     def add(self):
         """ADD
         -- pops the two top elements from the stack, adds their values
@@ -15,13 +23,13 @@ class SInterpreter:
         """
         value_1 = self.stack.pop()
         value_2 = self.stack.pop()
-        if value_1 in self.var.keys():
-            value_1 = self.var[value_1]
-        if value_2 in self.var.keys():
-            value_2 = self.var[value_2]
+
+        value_1 = self.in_var(value_1)
+        value_2 = self.in_var(value_2)
+
         try:
             self.stack.append(int(value_1) + int(value_2))
-        except TypeError:
+        except ValueError:
             print("Error")
             sys.exit(1)
 
@@ -33,16 +41,15 @@ class SInterpreter:
         """
         value_1 = self.stack.pop()
         value_2 = self.stack.pop()
-        if value_1 in self.var.keys():
-            value_1 = self.var[value_1]
-        if value_2 in self.var.keys():
-            value_2 = self.var[value_2]
+        value_1 = self.in_var(value_1)
+        value_2 = self.in_var(value_2)
         self.stack.append(int(value_2) - int(value_1))
 
     def push(self, value: int | str):
         """PUSH
         -- pushes the operand op onto the stack
         """
+        value = value.strip()
         if value.isdigit():
             self.stack.append(int(value))
         else:
@@ -55,10 +62,8 @@ class SInterpreter:
         """
         value_1 = self.stack.pop()
         value_2 = self.stack.pop()
-        if value_1 in self.var.keys():
-            value_1 = self.var[value_1]
-        if value_2 in self.var.keys():
-            value_2 = self.var[value_2]
+        value_1 = self.in_var(value_1)
+        value_2 = self.in_var(value_2)
         self.stack.append(int(value_1) * int(value_2))
 
     def assign(self):
@@ -70,16 +75,17 @@ class SInterpreter:
         var = self.stack.pop()
         self.var[var] = value
 
-    def print(self):
+    def print_stack(self):
         """PRINT
         -- prints the value currently on top of the stack
         """
         value = self.stack.pop()
-        if value in self.var.keys():
+        if value in self.var:
             value = self.var[value]
         print(value)
 
     def cycle(self):
+        """Main loop"""
         var = ""
         while True:
             var = sys.stdin.readline()
@@ -98,7 +104,7 @@ class SInterpreter:
                 case "ADD":
                     self.add()
                 case "PRINT":
-                    self.print()
+                    self.print_stack()
 
 
 if __name__ == "__main__":

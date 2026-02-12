@@ -19,26 +19,29 @@ class LParser:
         self.curr_token: LToken = LToken("", LToken.ERROR)
 
     def parse(self):
-        """?"""
+        """Main call to start the parser"""
         self.next_token()
         self.statements()
 
     def next_token(self):
-        """get the next token from the lexer"""
+        """Get the next token from the lexer"""
         self.curr_token = self.lexer.get_next_token()
         if self.curr_token.token_code == LToken.ERROR:
-            self.error()
+            self.error("Syntax error")
 
     def statements(self):
-        """?"""
+        """Statements -> Statement ; Statements | end"""
         while self.curr_token.token_code != LToken.END:
             match self.curr_token.token_code:
                 case LToken.ID | LToken.PRINT:
                     self.statement()
                 case LToken.SEMICOL:
                     self.next_token()
+                case LToken.ERROR:
+                    self.error("Syntax error")
 
     def statement(self):
+        """Statement -> id = Expr | print id"""
         match self.curr_token.token_code:
             case LToken.ID:
                 print(f"PUSH {self.curr_token.token_input}")
@@ -50,13 +53,19 @@ class LParser:
             case LToken.PRINT:
                 self.next_token()
                 if self.curr_token.token_code != LToken.ID:
-                    self.error()
+                    error_msg = [
+                        key
+                        for key, value in self.lexer.KEY_TOKENS.items()
+                        if value == self.curr_token.token_code
+                    ]
+                    self.error(f"Syntax error print a variable not {error_msg[0]}")
                     return
                 print(f"PUSH {self.curr_token.token_input}")
                 print("PRINT")
                 self.next_token()
 
     def expr(self):
+        """Expr -> Term | Term + Expr | Term - Expr"""
         self.term()
         match self.curr_token.token_code:
             case LToken.PLUS:
@@ -69,18 +78,12 @@ class LParser:
                 self.expr()
                 print("SUB")
                 return
-            case (
-                LToken.SEMICOL
-                | LToken.LPAREN
-                | LToken.RPAREN
-                | LToken.ID
-                | LToken.INT
-                | LToken.MULT
-            ):
-                return
-        self.error()
+            case _ if self.curr_token.token_code not in self.lexer.KEY_TOKENS.values():
+                self.error("Syntax error")
+        return
 
     def term(self):
+        """Term -> Factor | Factor * Term"""
         self.factor()
         self.next_token()
         match self.curr_token.token_code:
@@ -91,6 +94,7 @@ class LParser:
         return
 
     def factor(self):
+        """Factor -> int | id | ( Expr )"""
         match self.curr_token.token_code:
             case LToken.ID | LToken.INT:
                 print(f"PUSH {self.curr_token.token_input}")
@@ -102,9 +106,9 @@ class LParser:
                     return
         return
 
-    def error(self):
-        """?"""
-        print("Syntax error")
+    def error(self, msg: str):
+        """Print error msg and exit program"""
+        print(msg)
         sys.exit(1)
 
 

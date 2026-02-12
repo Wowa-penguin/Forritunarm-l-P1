@@ -8,8 +8,10 @@ class LLexer:
     """Lexer class"""
 
     KEY_TOKENS = {
+        "id": 0,
         "=": 1,
         ";": 2,
+        "int": 3,
         "+": 4,
         "-": 5,
         "*": 6,
@@ -17,13 +19,14 @@ class LLexer:
         ")": 8,
         "print": 9,
         "end": 10,
+        "error": 11,
     }
 
     def __init__(self):
         self.lexer = ""
         self.next_char = ""
         self.key_chars: list = []
-        for key in self.KEY_TOKENS.keys():
+        for key in self.KEY_TOKENS:
             self.key_chars.append(key)
         self.key_chars.append("\n")
 
