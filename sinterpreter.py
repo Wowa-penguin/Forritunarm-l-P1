@@ -15,7 +15,10 @@ class SInterpreter:
         """Check if a instans of a var is in dict of var"""
         if value in self.var:
             return self.var[value]
-        return value
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return 0
 
     def add(self):
         """ADD
@@ -31,7 +34,7 @@ class SInterpreter:
         try:
             self.stack.append(int(value_1) + int(value_2))
         except ValueError:
-            print("Error")
+            print("Error for operator: ADD")
             sys.exit(1)
 
     def sub(self):
@@ -44,7 +47,11 @@ class SInterpreter:
         value_2 = self.stack.pop()
         value_1 = self.in_var(value_1)
         value_2 = self.in_var(value_2)
-        self.stack.append(int(value_2) - int(value_1))
+        try:
+            self.stack.append(int(value_2) - int(value_1))
+        except ValueError:
+            print("Error for operator: SUB")
+            sys.exit(1)
 
     def push(self, value: Union[int, str]):
         """PUSH
@@ -65,7 +72,11 @@ class SInterpreter:
         value_2 = self.stack.pop()
         value_1 = self.in_var(value_1)
         value_2 = self.in_var(value_2)
-        self.stack.append(int(value_1) * int(value_2))
+        try:
+            self.stack.append(int(value_1) * int(value_2))
+        except ValueError:
+            print("Error for operator: MULT")
+            sys.exit(1)
 
     def assign(self):
         """ASSIGN
@@ -73,7 +84,17 @@ class SInterpreter:
         -- element (a value) to the second element (a variable)
         """
         value = self.stack.pop()
-        var = self.stack.pop()
+        var: str = self.stack.pop()
+        if not var.isalpha():
+            print("Error for operator: ASSIGN")
+            return
+        if value in self.var:
+            value = self.var[value]
+        else:
+            try:
+                value = int(value)
+            except TypeError:
+                value = 0
         self.var[var] = value
 
     def print_stack(self):
