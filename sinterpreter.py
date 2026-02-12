@@ -81,9 +81,11 @@ class SInterpreter:
         -- prints the value currently on top of the stack
         """
         value = self.stack.pop()
-        if value in self.var:
+        if value not in self.var:
+            print(0)
+        else:
             value = self.var[value]
-        print(value)
+            print(value)
 
     def cycle(self):
         """Main loop"""

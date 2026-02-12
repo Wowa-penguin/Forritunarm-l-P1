@@ -1,25 +1,10 @@
-LToken(0, 'var')
-LToken(1, '=')
-LToken(3, '3')
-LToken(2, ';')
-LToken(0, 'var')
-LToken(1, '=')
-LToken(0, 'var')
-LToken(4, '+')
-LToken(3, '1')
-LToken(2, ';')
-LToken(0, 'b')
-LToken(1, '=')
-LToken(3, '3')
-LToken(6, '*')
-LToken(0, 'var')
-LToken(2, ';')
-LToken(0, 'cc')
-LToken(1, '=')
-LToken(5, '-')
-LToken(0, 'b')
-LToken(2, ';')
-LToken(9, 'print')
-LToken(0, 'cc')
-LToken(2, ';')
-LToken(10, 'end')
+PUSH fLAwA
+PRINT
+PUSH fdjZ
+PRINT
+PUSH fdjZ
+PRINT
+PUSH cTtHO
+PRINT
+PUSH cTtHO
+PRINT
