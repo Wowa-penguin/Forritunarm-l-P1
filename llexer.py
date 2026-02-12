@@ -7,20 +7,7 @@ from ltoken import LToken
 class LLexer:
     """Lexer class"""
 
-    KEY_TOKENS = {
-        "id": 0,
-        "=": 1,
-        ";": 2,
-        "int": 3,
-        "+": 4,
-        "-": 5,
-        "*": 6,
-        "(": 7,
-        ")": 8,
-        "print": 9,
-        "end": 10,
-        "error": 11,
-    }
+    KEY_TOKENS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
     _SINGLE_CHAR_TOKENS = {
         "=": LToken.ASSIGN,
@@ -46,7 +33,7 @@ class LLexer:
             self.get_char()
 
         if self.next_char == "":
-            return LToken("end", LToken.END)
+            return LToken("", LToken.ERROR)
 
         if self.next_char in self._SINGLE_CHAR_TOKENS:
             ch = self.next_char

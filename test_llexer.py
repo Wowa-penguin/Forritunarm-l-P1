@@ -12,3 +12,5 @@ if __name__ == "__main__":
     while curr_token.token_code != LToken.END:
         curr_token = lexer.get_next_token()
         print(curr_token)
+        if curr_token.token_code == LToken.ERROR:
+            break

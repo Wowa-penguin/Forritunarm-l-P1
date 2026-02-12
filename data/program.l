@@ -1,6 +1,2 @@
-print fLAwA;
-print fdjZ;
-print fdjZ;
-print cTtHO;
-print cTtHO;
-end
+a=4-2;
+print a;
