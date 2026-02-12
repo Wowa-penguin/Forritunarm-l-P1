@@ -1,3 +1,10 @@
-PUSH var
-PUSH 3
-Syntax error
+PUSH fLAwA
+PRINT
+PUSH fdjZ
+PRINT
+PUSH fdjZ
+PRINT
+PUSH cTtHO
+PRINT
+PUSH cTtHO
+PRINT

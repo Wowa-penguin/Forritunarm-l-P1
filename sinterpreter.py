@@ -106,6 +106,9 @@ class SInterpreter:
                 self.add()
             elif op == "PRINT":
                 self.print_stack()
+            elif op == "UMINUS":
+                print("Error for operator: UMINUS")
+                break
 
 
 if __name__ == "__main__":

@@ -65,6 +65,7 @@ class LParser:
             print(f"PUSH {self.curr_token.token_input}")
             print("PRINT")
             self.next_token()
+            return
 
         self.error("Syntax error")
 
@@ -114,7 +115,7 @@ class LParser:
     def error(self, msg: str):
         """Print error msg and exit program"""
         print(msg)
-        sys.exit(1)
+        sys.exit(0)
 
 
 if __name__ == "__main__":
