@@ -44,7 +44,7 @@ class LParser:
         """Statement -> id = Expr | print id"""
         tc = self.curr_token.token_code
         if tc == LToken.ID:
-            variable = self.curr_token.token_input
+            variable = self.curr_token.lexeme
             self.next_token()
             if self.curr_token.token_code == LToken.ASSIGN:
                 print(f"PUSH {variable}")
@@ -62,7 +62,7 @@ class LParser:
                 ]
                 self.error(f"Syntax error print a variable not {error_msg[0]}")
                 return
-            print(f"PUSH {self.curr_token.token_input}")
+            print(f"PUSH {self.curr_token.lexeme}")
             print("PRINT")
             self.next_token()
             return
@@ -102,7 +102,7 @@ class LParser:
         """Factor -> int | id | ( Expr )"""
         tc = self.curr_token.token_code
         if tc in (LToken.ID, LToken.INT):
-            print(f"PUSH {self.curr_token.token_input}")
+            print(f"PUSH {self.curr_token.lexeme}")
             return
         if tc == LToken.LPAREN:
             self.next_token()
