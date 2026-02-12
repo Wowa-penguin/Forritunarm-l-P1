@@ -1,6 +1,7 @@
 """Imports"""
 
 import sys
+from typing import Union
 
 
 class SInterpreter:
@@ -45,7 +46,7 @@ class SInterpreter:
         value_2 = self.in_var(value_2)
         self.stack.append(int(value_2) - int(value_1))
 
-    def push(self, value: int | str):
+    def push(self, value: Union[int, str]):
         """PUSH
         -- pushes the operand op onto the stack
         """
@@ -92,19 +93,18 @@ class SInterpreter:
             var = var.replace("\n", "").split(" ")
             if var[0] == "":
                 break
-            if var[0] == "PUSH":
+            op = var[0]
+            if op == "PUSH":
                 self.push(var[1])
-            elif var[0] == "SUB":
+            elif op == "SUB":
                 self.sub()
-            elif var[0] == "SUB":
-                self.sub()
-            elif var[0] == "MULT":
+            elif op == "MULT":
                 self.mult()
-            elif var[0] == "ASSIGN":
+            elif op == "ASSIGN":
                 self.assign()
-            elif var[0] == "ADD":
+            elif op == "ADD":
                 self.add()
-            elif var[0] == "PRINT":
+            elif op == "PRINT":
                 self.print_stack()
 
 
