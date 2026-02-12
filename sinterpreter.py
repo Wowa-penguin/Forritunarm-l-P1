@@ -92,19 +92,20 @@ class SInterpreter:
             var = var.replace("\n", "").split(" ")
             if var[0] == "":
                 break
-            match var[0]:
-                case "PUSH":
-                    self.push(var[1])
-                case "SUB":
-                    self.sub()
-                case "MULT":
-                    self.mult()
-                case "ASSIGN":
-                    self.assign()
-                case "ADD":
-                    self.add()
-                case "PRINT":
-                    self.print_stack()
+            if var[0] == "PUSH":
+                self.push(var[1])
+            elif var[0] == "SUB":
+                self.sub()
+            elif var[0] == "SUB":
+                self.sub()
+            elif var[0] == "MULT":
+                self.mult()
+            elif var[0] == "ASSIGN":
+                self.assign()
+            elif var[0] == "ADD":
+                self.add()
+            elif var[0] == "PRINT":
+                self.print_stack()
 
 
 if __name__ == "__main__":
